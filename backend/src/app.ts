@@ -1,21 +1,50 @@
-import express, { Application, Request, Response } from 'express';
-// import routes from './routes';
+import express, { Request, Response } from "express";
+import dotenv from "dotenv";
+import Groq from "groq-sdk";
+const app = express();
+const PORT = 3000;
 
-const app: Application = express();
-const PORT = process.env.PORT || 3000;
-
-// Middleware
+dotenv.config();
 app.use(express.json());
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+async function mainChat({
+  prompts,
+}: {
+  prompts: Array<{
+    role: "user" | "assistant";
+    content: string;
+  }>;
+}) {
+  const completion = await groq.chat.completions
+    .create({
+      messages: prompts,
+      model: "llama-3.3-70b-versatile",
+    })
+    .then((chatCompletion) => {
+      // console.log(chatCompletion.choices[0]?.message?.content || "");
+      return chatCompletion;
+    });
+  return completion.choices;
+}
 
-// Routes
-// app.use('/api', routes);
 
-// Root Route
-app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to the TypeScript Node.js App!');
+app.post("/chat", async (req: Request, res: Response) => {
+  const response = await mainChat({
+    prompts: req.body.request_prompt,
+  });
+  res.json(response);
 });
 
-// Start Server
+// expected paylaod for /chat
+// {
+//   "request_prompt": [
+//     {
+//       "role": "user",
+//       "content": "hey i am vinay"
+//     }
+//   ]
+// }
+
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

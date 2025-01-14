@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Moon, Sun, Code, Eye, ChevronRight, ChevronDown, Folder, FileCode } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
-import Editor from '@monaco-editor/react';
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import Editor from '@monaco-editor/react';
+import { ChevronDown, ChevronRight, Code, Eye, FileCode, Folder, Moon, Sun } from 'lucide-react';
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface FileStructure {
   name: string;
@@ -117,7 +117,7 @@ export default function BuilderPage() {
         </header>
 
         <div className="flex-1 flex gap-4 p-4">
-          <div className="w-64 space-y-4">
+          <div className="w-96 space-y-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Steps</CardTitle>
@@ -149,7 +149,7 @@ export default function BuilderPage() {
           <Card className="flex-1">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
               <div className="px-4 pt-2">
-                <TabsList className="h-12">
+                <TabsList>
                   <TabsTrigger value="code" className="flex items-center space-x-2">
                     <Code className="w-4 h-4" />
                     <span>Code</span>
